@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shivam Earn — Demo</title>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#172033;--muted:#69758a;--green:#087f5b;--blue:#315efb;--line:#e8edf5}
+*{box-sizing:border-box}body{margin:0;font-family:Arial, sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(120deg,#123c32,#087f5b);color:white;padding:22px 18px}
+.wrap{max-width:1000px;margin:auto;padding:0 16px}header h1{margin:0;font-size:25px}header p{margin:7px 0 0;color:#d8f5e9}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}button,.btn{border:0;border-radius:10px;padding:11px 15px;background:var(--green);color:white;font-weight:700;cursor:pointer}
+nav button{background:#e3f1eb;color:#17644d}nav button.active{background:var(--green);color:white}
+main{padding:8px 0 35px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 5px 18px #1b34500a;margin-bottom:14px}
+.card h2,.card h3{margin:0 0 12px}.muted{color:var(--muted);font-size:14px}.amount{font-size:28px;font-weight:800;color:var(--green)}
+.stat{font-size:23px;font-weight:800;margin-top:8px}input,select{width:100%;padding:12px;border:1px solid #d9e1ed;border-radius:9px;margin:6px 0 12px;font-size:15px}
+label{font-size:14px;font-weight:700}.hidden{display:none!important}.task{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid var(--line);padding:13px 0}.task:first-of-type{border-top:0}
+.small{font-size:12px;color:var(--muted)}.notice{background:#fff8df;border:1px solid #f2df9d;padding:12px;border-radius:10px;font-size:13px;line-height:1.5}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+.pill{display:inline-block;background:#e4f5ed;color:#087f5b;padding:5px 9px;border-radius:20px;font-size:12px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>🌿 Shivam Earn</h1><p>Chhote tasks karo, points kamao — demo website</p></div></header>
+<div class="wrap">
+<nav>
+<button class="active" onclick="show('home',this)">Dashboard</button>
+<button onclick="show('tasks',this)">Tasks</button>
+<button onclick="show('wallet',this)">Wallet</button>
+<button onclick="show('account',this)">Login / Register</button>
+<button onclick="show('admin',this)">Admin Demo</button>
+</nav>
+<main>
+<section id="home">
+<div class="card"><div class="muted">Demo wallet balance</div><div class="amount" id="balance">₹125.00</div><p class="small">Yeh sirf sample balance hai; real paisa nahi.</p></div>
+<div class="grid">
+<div class="card"><div class="muted">Aaj ke tasks</div><div class="stat" id="done">2 / 5</div></div>
+<div class="card"><div class="muted">Referral code</div><div class="stat">SHIVAM25</div><button onclick="copyCode()">Copy code</button></div>
+<div class="card"><div class="muted">Daily bonus</div><div class="stat">₹5</div><button onclick="bonus()">Bonus claim karo</button></div>
+</div>
+<div class="card"><h3>Shuru kaise karein?</h3><p class="muted">1. Account demo mein register karein. 2. Tasks page par sample tasks complete karein. 3. Wallet mein demo balance dekhein.</p></div>
+</section>
+<section id="tasks" class="hidden">
+<div class="card"><h2>Available Tasks</h2><p class="muted">Har task ek baar complete ho sakta hai.</p>
+<div id="taskList"></div></div>
+</section>
+<section id="wallet" class="hidden">
+<div class="card"><h2>My Wallet</h2><div class="amount" id="walletBalance">₹125.00</div><p class="muted">Demo balance only</p>
+<label>UPI ID (sample only)</label><input id="upi" placeholder="name@upi">
+<label>Withdrawal amount (₹)</label><input id="withdrawAmount" type="number" min="50" placeholder="Minimum ₹50">
+<button onclick="withdraw()">Withdrawal request demo</button><p id="withdrawMsg" class="small"></p>
+</div>
+<div class="notice">⚠️ Abhi UPI payment ya withdrawal system connected nahi hai. Koi asli payment nahi bheji jayegi.</div>
+</section>
+<section id="account" class="hidden">
+<div class="grid">
+<div class="card"><h2>Register</h2><label>Naam</label><input id="regName" placeholder="Apna naam"><label>Mobile number</label><input id="regMobile" maxlength="10" placeholder="10 digit mobile"><label>Password</label><input id="regPass" type="password" placeholder="Demo password"><button onclick="register()">Demo account banayein</button><p id="regMsg" class="small"></p></div>
+<div class="card"><h2>Login</h2><label>Mobile number</label><input id="loginMobile" maxlength="10" placeholder="Registered mobile"><label>Password</label><input id="loginPass" type="password" placeholder="Password"><button onclick="login()">Login</button><p id="loginMsg" class="small"></p><button style="background:#667085" onclick="logout()">Logout</button></div>
+</div>
+<p class="notice">Yeh browser-only demo login hai. Ismein password secure server par save nahi hota. Public website par ise real user data ke liye use na karein.</p>
+</section>
+<section id="admin" class="hidden">
+<div class="card"><h2>Admin Panel — Demo</h2><p class="muted">Demo access code: <b>ADMIN123</b></p><label>Admin code</label><input id="adminCode" placeholder="Enter demo code"><button onclick="adminLogin()">Open admin view</button><p id="adminMsg" class="small"></p><div id="adminData" class="hidden"><h3>Overview</h3><div class="grid"><div class="card"><span class="muted">Registered demo users</span><div class="stat" id="userCount">0</div></div><div class="card"><span class="muted">Demo task claims</span><div class="stat" id="claimCount">0</div></div></div><h3>Users</h3><div style="overflow:auto"><table><thead><tr><th>Name</th><th>Mobile</th></tr></thead><tbody id="usersTable"></tbody></table></div></div></div>
+<div class="notice">Admin panel bhi sirf local demo hai. Iska code public HTML mein dikh sakta hai; real admin security ke liye backend, database aur server-side permissions zaroori hain.</div>
+</section>
+</main>
+<footer>© Shivam Earn · Learning demo · Real earning/payment service nahi</footer>
+</div>
+<script>
+let balance=125, done=2, claimed=new Set(), bonusTaken=false, users=JSON.parse(localStorage.getItem('se_users')||'[]'), claims=0;
+const tasks=[['Daily check-in',5],['Read earning tips',3],['Complete profile',4],['Answer a sample survey',8],['Invite a friend (demo)',10]];
+function money(){document.getElementById('balance').textContent='₹'+balance.toFixed(2);document.getElementById('walletBalance').textContent='₹'+balance.toFixed(2);document.getElementById('done').textContent=done+' / 5'}
+function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function renderTasks(){document.getElementById('taskList').innerHTML=tasks.map((t,i)=>`<div class="task"><div><b>${t[0]}</b><div class="small">Reward: ₹${t[1]}</div></div><button ${claimed.has(i)?'disabled style="background:#98a2b3"':''} onclick="claim(${i})">${claimed.has(i)?'Completed':'Complete'}</button></div>`).join('')}
+function claim(i){if(claimed.has(i))return;claimed.add(i);balance+=tasks[i][1];done=Math.min(5,done+1);claims++;money();renderTasks()}
+function bonus(){if(bonusTaken){alert('Aaj ka bonus claim ho chuka hai.');return}bonusTaken=true;balance+=5;money();alert('Demo bonus ₹5 add ho gaya!')}
+function copyCode(){navigator.clipboard?.writeText('SHIVAM25');alert('Referral code: SHIVAM25')}
+function register(){let n=regName.value.trim(),m=regMobile.value.trim(),p=regPass.value;if(!n||!/^[0-9]{10}$/.test(m)||p.length<4){regMsg.textContent='Naam, 10 digit mobile aur kam se kam 4 character password daalein.';return}if(users.some(u=>u.mobile===m)){regMsg.textContent='Yeh mobile pehle se registered hai.';return}users.push({name:n,mobile:m,password:p});localStorage.setItem('se_users',JSON.stringify(users));regMsg.textContent='Demo account ban gaya. Ab login karein.'}
+function login(){let u=users.find(x=>x.mobile===loginMobile.value.trim()&&x.password===loginPass.value);loginMsg.textContent=u?'Welcome, '+u.name+'! Demo login successful.':'Mobile ya password galat hai.'}
+function logout(){loginMsg.textContent='Aap logout ho gaye.'}
+function withdraw(){let a=Number(withdrawAmount.value);withdrawMsg.textContent=(!upi.value.trim()||!Number.isFinite(a)||a<50)?'UPI ID aur kam se kam ₹50 amount daalein.':'Demo request dikhayi gayi — koi real withdrawal process nahi hua.'}
+function adminLogin(){if(adminCode.value!=='ADMIN123'){adminMsg.textContent='Code galat hai.';return}adminMsg.textContent='Demo admin view open.';adminData.classList.remove('hidden');userCount.textContent=users.length;claimCount.textContent=claims;usersTable.innerHTML=users.map(u=>`<tr><td>${u.name.replace(/[&<>"]/g,'')}</td><td>${u.mobile}</td></tr>`).join('')}
+renderTasks();money();
+</script>
+</body></html>
